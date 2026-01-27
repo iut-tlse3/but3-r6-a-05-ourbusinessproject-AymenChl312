@@ -1,12 +1,12 @@
 package ourbusinessproject;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Entity
 public class Enterprise {
@@ -21,6 +21,25 @@ public class Enterprise {
     private String contactName;
     @NotBlank @Email
     private String contactEmail;
+
+    @OneToMany(mappedBy = "enterprise")
+    private Collection<Project> projects;
+
+    /**
+     *
+     * @return projects
+     */
+    public Collection<Project> getProjects() {
+        return projects;
+    }
+
+    /**
+     *
+     * @param projects
+     */
+    public void setProjects(Collection<Project> projects) {
+        this.projects = projects;
+    }
 
     /**
      *
