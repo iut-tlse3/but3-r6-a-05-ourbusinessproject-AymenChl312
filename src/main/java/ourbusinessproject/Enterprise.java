@@ -49,10 +49,18 @@ public class Enterprise {
         this.name = name;
     }
 
+    /**
+     *
+     * @return id
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setId(Long id) {
         this.id = id;
     }
@@ -111,5 +119,12 @@ public class Enterprise {
      */
     public String getContactEmail() {
         return contactEmail;
+    }
+
+    public void addProject(Project project) {
+        if(this.projects == null) {
+            this.projects = new ArrayList<>();
+        }
+        this.projects.add(project);
     }
 }
