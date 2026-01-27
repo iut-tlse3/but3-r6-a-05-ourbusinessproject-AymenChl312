@@ -5,6 +5,8 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EnterpriseProjectService {
 
@@ -88,5 +90,10 @@ public class EnterpriseProjectService {
      */
     public EntityManager getEntityManager() {
         return entityManager;
+    }
+
+    public List<Project> findAllProjects() {
+        String query = "SELECT p FROM Project p ORDER BY p.title";
+        return entityManager.createQuery(query).getResultList();
     }
 }
