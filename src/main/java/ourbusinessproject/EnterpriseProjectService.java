@@ -2,7 +2,7 @@ package ourbusinessproject;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.validation.ConstraintViolationException;
+import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,89 +11,89 @@ import java.util.List;
 public class EnterpriseProjectService {
 
     @PersistenceContext
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     /**
-     *
-     * @param entityManager
+     * Create a new EnterpriseProjectService initialized with an entity manager
+     * @param entityManager the entity manager
      */
     public EnterpriseProjectService(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
+    public EntityManager getEntityManager() {
+        return this.entityManager;
+    }
+
     /**
-     *
-     * @param title
-     * @param description
-     * @param enterprise
-     * @return new project
+     * Create a new project
+     * @param aTitle the title of the new project
+     * @param aDescription the description of the new project
+     * @return the created project
      */
-    public Project newProject(String title, String description, Enterprise enterprise){
+    public Project newProject(String aTitle, String aDescription, Enterprise enterprise) {
         Project project = new Project();
-        project.setTitle(title);
-        project.setDescription(description);
+        project.setTitle(aTitle);
+        project.setDescription(aDescription);
         project.setEnterprise(enterprise);
-
-        if (enterprise != null) {
-            enterprise.addProject(project);
-        }
-
-        entityManager.persist(project);
-        entityManager.flush();
-
+        this.entityManager.persist(project);
+        this.entityManager.flush();
+        enterprise.addProject(project);
         return project;
     }
 
     /**
-     *
-     * @param id
-     * @return project by id
+     * Find the project for the given id
+     * @param projectId the id of the searched project
+     * @return the project with corresponding id or null
      */
-    public Project findProjectById(Long id) {
-        return entityManager.find(Project.class, id);
+    public Project findProjectById(Long projectId) {
+        return this.entityManager.find(Project.class, projectId);
     }
 
     /**
-     *
-     * @param name
-     * @param description
-     * @param contactName
-     * @param contactEmail
-     * @return new enterprise
+     * Create a new enterprise
+     * @param aName the name of the enterprise
+     * @param aDescription the description of the enterprise
+     * @param aContactName the contact name of the enterprise
+     * @param mail the mail of the enterprise
+     * @return the created enterprise
      */
-    public Enterprise newEnterprise(String name, String description, String contactName, String contactEmail) {
+    public Enterprise newEnterprise(
+            String aName,
+            String aDescription,
+            String aContactName,
+            String mail
+    ) {
         Enterprise enterprise = new Enterprise();
-        enterprise.setName(name);
-        enterprise.setDescription(description);
-        enterprise.setContactName(contactName);
-        enterprise.setContactEmail(contactEmail);
-
-        entityManager.persist(enterprise);
-
-        entityManager.flush();
-
+        enterprise.setName(aName);
+        enterprise.setDescription(aDescription);
+        enterprise.setContactEmail(mail);
+        enterprise.setContactName(aContactName);
+        this.entityManager.persist(enterprise);
+        this.entityManager.flush();
         return enterprise;
     }
 
     /**
-     *
-     * @param id
-     * @return enterprise by id
+     * Find the enterprise for the given id
+     * @param enterpriseId the id of the searched enterprise
+     * @return the enterprise if it exists else null
      */
-    public Enterprise findEnterpriseById(Long id) {
-        return entityManager.find(Enterprise.class, id);
+    public Enterprise findEnterpriseById(Long enterpriseId) {
+        return this.entityManager.find(Enterprise.class, enterpriseId);
     }
 
     /**
      *
-     * @return entity manager
+     * @return the list of all projects order by title
      */
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
-
     public List<Project> findAllProjects() {
-        String query = "SELECT p FROM Project p ORDER BY p.title";
-        return entityManager.createQuery(query).getResultList();
+        String queryAsJpql = "select p from Project p order by p.title";
+        TypedQuery<Project> query = this.entityManager.createQuery(
+                queryAsJpql,
+                Project.class
+        );
+        return query.getResultList();
     }
 }
