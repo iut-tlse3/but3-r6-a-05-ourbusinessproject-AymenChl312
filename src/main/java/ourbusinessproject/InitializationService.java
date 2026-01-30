@@ -24,7 +24,7 @@ public class InitializationService {
     /**
      * Initialization of the initial list of projects
      */
-    @Transactional
+    @Transactional // Avec l'annotation @Transactional, soit tout est executé soit rien
     public void initProjects() {
         initEnterprise();
         project1E1 = enterpriseProjectService.newProject("p1E1","P1E1 desc",enterprise1);
