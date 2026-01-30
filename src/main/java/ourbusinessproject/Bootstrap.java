@@ -25,6 +25,7 @@ public class Bootstrap {
     public void init() {
         try {
             this.initializationService.initProjects();
+            this.initializationService.initPartnerships();
         } catch (RuntimeException re) {
             logger.error("Error during initialization", re);
         }

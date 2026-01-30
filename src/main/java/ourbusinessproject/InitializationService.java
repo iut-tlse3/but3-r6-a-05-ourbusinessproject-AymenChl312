@@ -1,5 +1,6 @@
 package ourbusinessproject;
 
+import jakarta.servlet.http.Part;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,18 @@ public class InitializationService {
     private Project project2E1;
     private Enterprise enterprise1;
     private Enterprise enterprise2;
+    private Partnership partnershipP1E1_E2;
+    private Partnership partnershipP1E2_E1;
+    private Partnership partnershipP2E1_E2;
 
     /**
      * This method initializes the project data.
      */
     @Autowired
     private EnterpriseProjectService enterpriseProjectService;
+
+    @Autowired
+    private PartnershipService partnershipService;
 
     /**
      * Initialization of the initial list of projects
@@ -45,6 +52,13 @@ public class InitializationService {
                 "My comp2 description",
                 "comp2 contact name",
                 "comp2@com.com");
+    }
+
+    @Transactional
+    public void initPartnerships() {
+        partnershipP1E1_E2 = partnershipService.newPartnership(project1E1,enterprise2);
+        partnershipP1E2_E1 = partnershipService.newPartnership(project1E2, enterprise1);
+        partnershipP2E1_E2 = partnershipService.newPartnership(project2E1, enterprise2);
     }
 
     /**
@@ -80,5 +94,29 @@ public class InitializationService {
      */
     public Enterprise getEnterprise2() {
         return enterprise2;
+    }
+
+    /**
+     *
+     * @return partnership between project 1e1 and enterprise 2
+     */
+    public Partnership getPartnershipP1E1WithE2() {
+        return partnershipP1E1_E2;
+    }
+
+    /**
+     *
+     * @return partnership between project 2e1 and enterprise 2
+     */
+    public Partnership getPartnershipP2E1WithE2() {
+        return partnershipP2E1_E2;
+    }
+
+    /**
+     *
+     * @return partnership between project 1e2 and enterprise 1
+     */
+    public Partnership getPartnershipP1E2WithE1() {
+        return partnershipP1E2_E1;
     }
 }

@@ -33,8 +33,9 @@ class BootstrapTest {
         // when the init method is triggered
         bootstrap.init();
 
-        // then the initialization of projects is triggered on the initialization service
+        // then the initialization of projects and partnerships is triggered on the initialization service
         verify(initializationService).initProjects();
+        verify(initializationService).initPartnerships();
     }
 
     @Test
